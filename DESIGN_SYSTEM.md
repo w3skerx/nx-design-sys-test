@@ -1,480 +1,1616 @@
-# Nextiva Test Design System
+# Design System
 
-**Version:** 1.0.0  
-**Purpose:** Test design system with distinctive, verifiable features
+## AI Instructions
 
-## 🎨 Design Tokens
+Read this file completely before implementing any UI. This is the single source of truth for all visual design decisions.
+
+**Rules:**
+1. Use only tokens, components, and patterns defined here
+2. Never hardcode colors, spacing, or typography values
+3. When combining components, prefer explicit composition over custom CSS
+4. If something is not documented, ask before improvising
+5. All implementations must support both light and dark modes
+
+---
+
+## Design Philosophy
+
+This system follows Bauhaus principles: form follows function, geometric clarity, and purposeful minimalism.
+
+**Core tenets:**
+- Every element serves a function. Remove anything that doesn't.
+- Geometric shapes and clean lines over decoration
+- Strong visual hierarchy through size, weight, and space
+- Limited, intentional color palette with bold accents
+- Typography as a structural element, not decoration
+
+---
+
+## Tokens
+
+Tokens are immutable design values. Reference by name, never by raw value.
 
 ### Colors
 
-**IMPORTANT:** These are non-standard colors chosen specifically for verification purposes.
+The palette uses an intense modern blue as the primary accent. All colors have light and dark mode variants.
 
-```css
-/* Primary: Purple (NOT blue) */
---color-primary: #6B4EFF;
---color-primary-hover: #5A3FE6;
---color-primary-active: #4930CC;
+#### Brand Colors
 
-/* Secondary: Coral Orange */
---color-secondary: #FF6B4E;
---color-secondary-hover: #E65A3F;
---color-secondary-active: #CC4930;
+| Token | Light Mode | Dark Mode | Usage |
+|-------|------------|-----------|-------|
+| `brand-primary` | #2563EB | #3B82F6 | Primary actions, active states, links |
+| `brand-primary-hover` | #1D4ED8 | #60A5FA | Hover state for primary elements |
+| `brand-primary-active` | #1E40AF | #2563EB | Pressed/active state |
+| `brand-primary-subtle` | #EFF6FF | #1E3A5F | Backgrounds, selected rows, highlights |
 
-/* Success: Bright Green */
---color-success: #4EFF6B;
---color-success-hover: #3FE65A;
---color-success-active: #30CC49;
+#### Neutral Colors
 
-/* Error: Pink-Red */
---color-error: #FF4E6B;
---color-error-hover: #E63F5A;
---color-error-active: #CC3049;
+| Token | Light Mode | Dark Mode | Usage |
+|-------|------------|-----------|-------|
+| `neutral-bg` | #FFFFFF | #0F0F0F | Page background |
+| `neutral-surface` | #FFFFFF | #171717 | Cards, panels, modals |
+| `neutral-surface-raised` | #F9FAFB | #1F1F1F | Raised surfaces, hover states |
+| `neutral-border` | #E5E7EB | #2E2E2E | Borders, dividers |
+| `neutral-border-strong` | #D1D5DB | #404040 | Emphasized borders, focus rings |
+| `neutral-text-primary` | #111827 | #F9FAFB | Headings, primary text |
+| `neutral-text-secondary` | #4B5563 | #9CA3AF | Body text, descriptions |
+| `neutral-text-muted` | #9CA3AF | #6B7280 | Captions, placeholders, disabled |
+| `neutral-text-inverse` | #FFFFFF | #0F0F0F | Text on colored backgrounds |
 
-/* Neutral: Standard gray scale */
---color-gray-50: #f9fafb;
---color-gray-100: #f3f4f6;
---color-gray-200: #e5e7eb;
---color-gray-300: #d1d5db;
---color-gray-400: #9ca3af;
---color-gray-500: #6b7280;
---color-gray-600: #4b5563;
---color-gray-700: #374151;
---color-gray-800: #1f2937;
---color-gray-900: #111827;
-```
+#### Semantic Colors
 
-### Spacing Scale
+| Token | Light Mode | Dark Mode | Usage |
+|-------|------------|-----------|-------|
+| `success` | #059669 | #10B981 | Success states, positive metrics |
+| `success-subtle` | #ECFDF5 | #064E3B | Success backgrounds |
+| `warning` | #D97706 | #F59E0B | Warnings, caution states |
+| `warning-subtle` | #FFFBEB | #78350F | Warning backgrounds |
+| `error` | #DC2626 | #EF4444 | Errors, destructive actions |
+| `error-subtle` | #FEF2F2 | #7F1D1D | Error backgrounds |
+| `info` | #2563EB | #3B82F6 | Informational states |
+| `info-subtle` | #EFF6FF | #1E3A5F | Info backgrounds |
 
-**CRITICAL:** Base unit is **6px** (not 4px or 8px).
+#### Channel Colors
 
-```css
---spacing-sm: 6px;   /* 1 unit */
---spacing-md: 12px;  /* 2 units */
---spacing-lg: 18px;  /* 3 units */
---spacing-xl: 24px;  /* 4 units */
---spacing-2xl: 30px; /* 5 units */
---spacing-3xl: 36px; /* 6 units */
-```
+| Token | Value | Usage |
+|-------|-------|-------|
+| `channel-phone` | #059669 | Phone/voice calls |
+| `channel-video` | #7C3AED | Video calls |
+| `channel-sms` | #2563EB | SMS/text messaging |
+| `channel-email` | #DC2626 | Email |
+| `channel-chat` | #0891B2 | Live chat/webchat |
+| `channel-internal` | #4B5563 | Internal team messaging |
 
-### Border Radius
+#### Presence Colors
 
-**CRITICAL:** All components use `rounded-xl` (12px radius) for a distinctly rounded appearance.
+| Token | Value | Usage |
+|-------|-------|-------|
+| `presence-online` | #059669 | Available, online |
+| `presence-busy` | #DC2626 | Busy, do not disturb |
+| `presence-away` | #F59E0B | Away, idle |
+| `presence-offline` | #9CA3AF | Offline, unavailable |
 
-```css
---border-radius: 12px; /* rounded-xl */
-```
+### Spacing
+
+Based on a 4px grid. Use for all margins, padding, and gaps.
+
+| Token | Value | Common Uses |
+|-------|-------|-------------|
+| `space-0` | 0px | Reset spacing |
+| `space-1` | 4px | Inline icon gaps, tight groups |
+| `space-2` | 8px | Icon-to-text, compact lists, button padding (sm) |
+| `space-3` | 12px | Form field internal padding |
+| `space-4` | 16px | Default content gap, card padding (sm), button padding (md) |
+| `space-5` | 20px | Card padding (md) |
+| `space-6` | 24px | Section gaps, card padding (lg) |
+| `space-8` | 32px | Major section breaks |
+| `space-10` | 40px | Page section separation |
+| `space-12` | 48px | Large section gaps |
+| `space-16` | 64px | Hero spacing, major landmarks |
 
 ### Typography
 
-```css
---font-family: system-ui, -apple-system, sans-serif;
---font-weight-normal: 400;
---font-weight-semibold: 600;
---font-weight-bold: 700;
+Font family: **Space Grotesk** (Google Fonts)
+
+Fallback stack: `'Space Grotesk', system-ui, -apple-system, sans-serif`
+
+| Token | Size | Weight | Line Height | Letter Spacing | Usage |
+|-------|------|--------|-------------|----------------|-------|
+| `display-xl` | 56px | 700 | 1.0 | -0.02em | Hero headlines |
+| `display-lg` | 48px | 700 | 1.05 | -0.02em | Page titles |
+| `display-md` | 36px | 600 | 1.1 | -0.01em | Section titles |
+| `heading-lg` | 28px | 600 | 1.2 | -0.01em | Card titles, major headings |
+| `heading-md` | 22px | 600 | 1.25 | 0 | Subsection headings |
+| `heading-sm` | 18px | 600 | 1.3 | 0 | Small headings, labels |
+| `body-lg` | 18px | 400 | 1.6 | 0 | Lead paragraphs |
+| `body-md` | 16px | 400 | 1.5 | 0 | Default body text |
+| `body-sm` | 14px | 400 | 1.5 | 0 | Secondary text, table cells |
+| `caption` | 12px | 400 | 1.4 | 0.01em | Timestamps, helper text |
+| `overline` | 11px | 600 | 1.3 | 0.08em | Labels, categories (uppercase) |
+| `mono` | 14px | 400 | 1.5 | 0 | Code, data, IDs |
+
+### Radius
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `radius-none` | 0px | Sharp corners when needed |
+| `radius-sm` | 4px | Buttons, badges, inputs |
+| `radius-md` | 8px | Cards, dropdowns, modals |
+| `radius-lg` | 12px | Large cards, panels |
+| `radius-xl` | 16px | Feature cards, hero elements |
+| `radius-full` | 9999px | Avatars, pills, circular buttons |
+
+### Shadows
+
+| Token | Light Mode | Dark Mode | Usage |
+|-------|------------|-----------|-------|
+| `shadow-sm` | 0 1px 2px rgba(0,0,0,0.05) | 0 1px 2px rgba(0,0,0,0.3) | Subtle lift, buttons |
+| `shadow-md` | 0 4px 6px rgba(0,0,0,0.07) | 0 4px 6px rgba(0,0,0,0.4) | Cards, dropdowns |
+| `shadow-lg` | 0 10px 15px rgba(0,0,0,0.1) | 0 10px 15px rgba(0,0,0,0.5) | Modals, popovers |
+| `shadow-xl` | 0 20px 25px rgba(0,0,0,0.15) | 0 20px 25px rgba(0,0,0,0.6) | Dialogs, overlays |
+
+### Borders
+
+| Token | Value |
+|-------|-------|
+| `border-width-default` | 1px |
+| `border-width-thick` | 2px |
+| `border-style` | solid |
+
+### Z-Index Scale
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `z-base` | 0 | Default content |
+| `z-dropdown` | 100 | Dropdowns, popovers |
+| `z-sticky` | 200 | Sticky headers |
+| `z-overlay` | 300 | Modal backdrops |
+| `z-modal` | 400 | Modals, dialogs |
+| `z-toast` | 500 | Toast notifications |
+| `z-tooltip` | 600 | Tooltips |
+
+### Transitions
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `duration-fast` | 100ms | Micro-interactions, hovers |
+| `duration-normal` | 200ms | Standard transitions |
+| `duration-slow` | 300ms | Complex animations |
+| `easing-default` | cubic-bezier(0.4, 0, 0.2, 1) | General purpose |
+| `easing-in` | cubic-bezier(0.4, 0, 1, 1) | Enter animations |
+| `easing-out` | cubic-bezier(0, 0, 0.2, 1) | Exit animations |
+
+---
+
+## Layout Components
+
+### Stack
+
+Arranges children in a row or column with consistent spacing.
+
+```tsx
+<Stack
+  direction="vertical" | "horizontal"
+  gap={SpacingToken}
+  align="start" | "center" | "end" | "stretch" | "baseline"
+  justify="start" | "center" | "end" | "between" | "around" | "evenly"
+  wrap={boolean}
+>
+  {children}
+</Stack>
+```
+
+**Examples:**
+- Form fields: `<Stack direction="vertical" gap="space-4">`
+- Button group: `<Stack direction="horizontal" gap="space-2">`
+- Centered content: `<Stack direction="vertical" align="center" justify="center">`
+
+### Grid
+
+CSS Grid-based layout for complex arrangements.
+
+```tsx
+<Grid
+  columns={1 | 2 | 3 | 4 | 6 | 12}
+  gap={SpacingToken}
+  columnGap={SpacingToken}
+  rowGap={SpacingToken}
+>
+  {children}
+</Grid>
+```
+
+**Responsive columns:**
+```tsx
+<Grid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} gap="space-6">
+```
+
+### Container
+
+Centers content with max-width constraints.
+
+```tsx
+<Container size="xs" | "sm" | "md" | "lg" | "xl" | "full">
+  {children}
+</Container>
+```
+
+| Size | Max Width |
+|------|-----------|
+| `xs` | 512px |
+| `sm` | 640px |
+| `md` | 768px |
+| `lg` | 1024px |
+| `xl` | 1280px |
+| `full` | 100% |
+
+### Section
+
+Semantic page section with consistent vertical spacing.
+
+```tsx
+<Section padding="sm" | "md" | "lg" | "xl">
+  {children}
+</Section>
+```
+
+| Size | Padding |
+|------|---------|
+| `sm` | space-6 |
+| `md` | space-10 |
+| `lg` | space-12 |
+| `xl` | space-16 |
+
+### Divider
+
+Visual separator between content.
+
+```tsx
+<Divider 
+  orientation="horizontal" | "vertical" 
+  spacing={SpacingToken}
+  color="default" | "subtle" | "strong"
+/>
 ```
 
 ---
 
-## 🧩 Components
+## Core Components
 
-### Button Component
-
-**DISTINCTIVE FEATURES:**
-- ✅ All PRIMARY buttons automatically prepend a 🚀 emoji
-- ✅ All button text is UPPERCASE and font-semibold
-- ✅ Uses rounded-xl (12px radius)
+### Button
 
 ```tsx
-import React from 'react';
-
-interface ButtonProps {
-  variant?: 'primary' | 'secondary' | 'ghost';
-  size?: 'sm' | 'md' | 'lg';
-  disabled?: boolean;
-  onClick?: () => void;
-  children: React.ReactNode;
-  className?: string;
-}
-
-const Button: React.FC<ButtonProps> = ({
-  variant = 'primary',
-  size = 'md',
-  disabled = false,
-  onClick,
-  children,
-  className = '',
-}) => {
-  // BASE STYLES: Always uppercase, semibold, rounded-xl
-  const baseStyles = 'inline-flex items-center justify-center font-semibold uppercase rounded-xl transition-colors';
-  
-  // SIZE VARIANTS: Using 6px base unit
-  const sizeStyles = {
-    sm: 'px-3 py-1.5 text-sm gap-1.5', // 12px padding, 6px gap
-    md: 'px-4 py-2 text-base gap-2',   // 16px padding, 8px gap  
-    lg: 'px-6 py-3 text-lg gap-2.5',   // 24px padding, 10px gap
-  };
-  
-  // VARIANT STYLES: Distinctive colors
-  const variantStyles = {
-    primary: 'bg-[#6B4EFF] hover:bg-[#5A3FE6] active:bg-[#4930CC] text-white',
-    secondary: 'bg-[#FF6B4E] hover:bg-[#E65A3F] active:bg-[#CC4930] text-white',
-    ghost: 'bg-transparent hover:bg-gray-100 active:bg-gray-200 text-gray-900',
-  };
-  
-  const disabledStyles = 'opacity-50 cursor-not-allowed';
-  
-  const classes = `
-    ${baseStyles}
-    ${sizeStyles[size]}
-    ${variantStyles[variant]}
-    ${disabled ? disabledStyles : ''}
-    ${className}
-  `.trim();
-  
-  return (
-    <button
-      className={classes}
-      disabled={disabled}
-      onClick={onClick}
-    >
-      {/* 🚀 CRITICAL: Primary buttons get a rocket emoji prepended */}
-      {variant === 'primary' && <span>🚀</span>}
-      {children}
-    </button>
-  );
-};
-
-export default Button;
+<Button
+  variant="primary" | "secondary" | "ghost" | "danger" | "success"
+  size="sm" | "md" | "lg"
+  disabled={boolean}
+  loading={boolean}
+  fullWidth={boolean}
+  leftIcon={IconName}
+  rightIcon={IconName}
+  onClick={() => void}
+>
+  {label}
+</Button>
 ```
 
-**Usage Examples:**
+**Sizing:**
+| Size | Height | Padding X | Font |
+|------|--------|-----------|------|
+| `sm` | 32px | space-3 | body-sm |
+| `md` | 40px | space-4 | body-md |
+| `lg` | 48px | space-5 | body-lg |
+
+**Variant usage:**
+- `primary`: Main action per view (one per screen ideally)
+- `secondary`: Supporting actions
+- `ghost`: Tertiary actions, toolbar buttons
+- `danger`: Destructive actions (delete, remove, end call)
+- `success`: Positive confirmations (accept call, save)
+
+### IconButton
+
+Circular or square button containing only an icon.
 
 ```tsx
-// Primary button - will show "🚀 SAVE" with purple background
-<Button variant="primary">Save</Button>
+<IconButton
+  icon={IconName}
+  variant="primary" | "secondary" | "ghost" | "danger"
+  size="sm" | "md" | "lg"
+  label={string}  // Required for accessibility
+  onClick={() => void}
+/>
+```
 
-// Secondary button - coral orange background, uppercase
-<Button variant="secondary">Cancel</Button>
+### Input
 
-// Ghost button - transparent with hover effect
-<Button variant="ghost">Delete</Button>
+```tsx
+<Input
+  type="text" | "email" | "password" | "number" | "tel" | "url" | "search"
+  label={string}
+  placeholder={string}
+  value={string}
+  onChange={(value: string) => void}
+  error={string}
+  hint={string}
+  disabled={boolean}
+  required={boolean}
+  leftIcon={IconName}
+  rightIcon={IconName}
+  rightAddon={ReactNode}
+/>
+```
 
-// Disabled state
-<Button variant="primary" disabled>Loading...</Button>
+### Textarea
+
+```tsx
+<Textarea
+  label={string}
+  placeholder={string}
+  value={string}
+  onChange={(value: string) => void}
+  rows={number}
+  maxLength={number}
+  error={string}
+  hint={string}
+  disabled={boolean}
+  required={boolean}
+  resize="none" | "vertical" | "horizontal" | "both"
+/>
+```
+
+### Select
+
+```tsx
+<Select
+  label={string}
+  options={Array<{ value: string; label: string; disabled?: boolean }>}
+  value={string}
+  onChange={(value: string) => void}
+  placeholder={string}
+  error={string}
+  disabled={boolean}
+  required={boolean}
+  searchable={boolean}
+/>
+```
+
+### MultiSelect
+
+```tsx
+<MultiSelect
+  label={string}
+  options={Array<{ value: string; label: string }>}
+  value={string[]}
+  onChange={(value: string[]) => void}
+  placeholder={string}
+  error={string}
+  maxSelected={number}
+/>
+```
+
+### Checkbox
+
+```tsx
+<Checkbox
+  label={string}
+  checked={boolean}
+  onChange={(checked: boolean) => void}
+  disabled={boolean}
+  indeterminate={boolean}
+  description={string}
+/>
+```
+
+### CheckboxGroup
+
+```tsx
+<CheckboxGroup
+  label={string}
+  options={Array<{ value: string; label: string; description?: string }>}
+  value={string[]}
+  onChange={(value: string[]) => void}
+  direction="vertical" | "horizontal"
+/>
+```
+
+### Radio
+
+```tsx
+<RadioGroup
+  label={string}
+  options={Array<{ value: string; label: string; description?: string }>}
+  value={string}
+  onChange={(value: string) => void}
+  direction="vertical" | "horizontal"
+/>
+```
+
+### Toggle
+
+```tsx
+<Toggle
+  label={string}
+  checked={boolean}
+  onChange={(checked: boolean) => void}
+  disabled={boolean}
+  size="sm" | "md"
+  description={string}
+/>
+```
+
+### Slider
+
+```tsx
+<Slider
+  label={string}
+  value={number}
+  onChange={(value: number) => void}
+  min={number}
+  max={number}
+  step={number}
+  showValue={boolean}
+/>
 ```
 
 ---
 
-### Input Component
+## Data Display Components
 
-**DISTINCTIVE FEATURES:**
-- ✅ Thick 3px LEFT border in primary purple (#6B4EFF)
-- ✅ Placeholder text is ALWAYS italic
-- ✅ Label is ALWAYS uppercase with letter-spacing
-- ✅ Uses rounded-xl (12px radius)
-
-**⚠️ CRITICAL - Tailwind Border Classes:**
-When setting borders with different colors per side, you MUST use side-specific color utilities:
-- ✅ Correct: `border-l-[3px] border-l-[#6B4EFF] border-y border-y-gray-300 border-r border-r-gray-300`
-- ❌ Wrong: `border-l-[3px] border-[#6B4EFF] border-y border-r border-gray-300` (generic `border-gray-300` overwrites all sides)
-
-**⚠️ CRITICAL - Dark Mode Compatibility:**
-Always explicitly set background and text colors to prevent browser dark mode from overriding styles:
-- ✅ Required: `bg-white text-gray-900` on input elements
-- ✅ Required: `placeholder:text-gray-400` for placeholder color
-- ✅ Required: `disabled:bg-gray-50` for disabled state background
+### Text
 
 ```tsx
-import React from 'react';
+<Text
+  variant={TypographyToken}
+  color="primary" | "secondary" | "muted" | "inverse" | "success" | "warning" | "error" | "brand"
+  align="left" | "center" | "right"
+  truncate={boolean}
+  as="p" | "span" | "label" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
+>
+  {children}
+</Text>
+```
 
-interface InputProps {
-  label?: string;
-  placeholder?: string;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  type?: 'text' | 'email' | 'password' | 'number';
-  disabled?: boolean;
-  error?: string;
-  helperText?: string;
-  className?: string;
-}
+### Card
 
-const Input: React.FC<InputProps> = ({
-  label,
-  placeholder,
-  value,
-  onChange,
-  type = 'text',
-  disabled = false,
-  error,
-  helperText,
-  className = '',
-}) => {
-  return (
-    <div className={`flex flex-col gap-1.5 ${className}`}>
-      {/* LABEL: Always uppercase with letter-spacing */}
-      {label && (
-        <label className="text-sm font-semibold uppercase tracking-wider text-gray-700">
-          {label}
-        </label>
-      )}
-      
-      {/* INPUT: 3px left border in purple, italic placeholder, rounded-xl */}
-      <input
-        type={type}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        disabled={disabled}
-        className={`
-          w-full px-3 py-2
-          bg-white text-gray-900
-          border-l-[3px] border-l-[#6B4EFF]
-          border-y border-y-gray-300
-          border-r border-r-gray-300
-          rounded-xl
-          placeholder:italic placeholder:text-gray-400
-          focus:outline-none focus:ring-2 focus:ring-[#6B4EFF] focus:ring-opacity-50
-          disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50
-          ${error ? 'border-r-[#FF4E6B] border-y-[#FF4E6B]' : ''}
-        `.trim()}
+```tsx
+<Card
+  variant="elevated" | "outlined" | "filled" | "ghost"
+  padding="none" | "sm" | "md" | "lg"
+  radius="md" | "lg"
+  interactive={boolean}  // Adds hover state and cursor
+  onClick={() => void}
+>
+  {children}
+</Card>
+```
+
+### Avatar
+
+```tsx
+<Avatar
+  src={string}
+  name={string}  // Used for initials fallback and alt text
+  size="xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+  status="online" | "offline" | "busy" | "away"
+  shape="circle" | "square"
+/>
+```
+
+| Size | Dimensions |
+|------|------------|
+| `xs` | 24px |
+| `sm` | 32px |
+| `md` | 40px |
+| `lg` | 48px |
+| `xl` | 64px |
+| `2xl` | 96px |
+
+### AvatarGroup
+
+```tsx
+<AvatarGroup
+  avatars={Array<{ src?: string; name: string }>}
+  max={number}
+  size="sm" | "md" | "lg"
+/>
+```
+
+### Badge
+
+```tsx
+<Badge
+  variant="default" | "primary" | "success" | "warning" | "error" | "outline"
+  size="sm" | "md"
+  dot={boolean}  // Shows only a colored dot
+>
+  {label}
+</Badge>
+```
+
+### Tag
+
+Dismissible label for categories, filters, or selections.
+
+```tsx
+<Tag
+  variant="default" | "primary" | "success" | "warning" | "error"
+  size="sm" | "md"
+  onRemove={() => void}
+  removable={boolean}
+>
+  {label}
+</Tag>
+```
+
+### Icon
+
+```tsx
+<Icon
+  name={IconName}
+  size="xs" | "sm" | "md" | "lg" | "xl"
+  color={ColorToken}
+/>
+```
+
+| Size | Dimensions |
+|------|------------|
+| `xs` | 12px |
+| `sm` | 16px |
+| `md` | 20px |
+| `lg` | 24px |
+| `xl` | 32px |
+
+**Available Icons:**
+
+Navigation: `chevron-up`, `chevron-down`, `chevron-left`, `chevron-right`, `arrow-up`, `arrow-down`, `arrow-left`, `arrow-right`, `menu`, `more-horizontal`, `more-vertical`, `external-link`
+
+Actions: `plus`, `minus`, `x`, `check`, `edit`, `trash`, `copy`, `download`, `upload`, `refresh`, `search`, `filter`, `sort`, `settings`, `share`
+
+Communication: `phone`, `phone-incoming`, `phone-outgoing`, `phone-missed`, `phone-off`, `video`, `video-off`, `mic`, `mic-off`, `headphones`, `message`, `mail`, `send`, `paperclip`, `at-sign`
+
+People: `user`, `users`, `user-plus`, `user-minus`, `user-check`
+
+Status: `info`, `warning`, `error`, `success`, `help`, `bell`, `bell-off`, `eye`, `eye-off`, `lock`, `unlock`
+
+Objects: `calendar`, `clock`, `star`, `star-filled`, `heart`, `heart-filled`, `bookmark`, `flag`, `tag`, `folder`, `file`, `image`, `link`, `hash`, `building`, `briefcase`
+
+Data: `chart-bar`, `chart-line`, `chart-pie`, `trending-up`, `trending-down`, `activity`
+
+### EmptyState
+
+```tsx
+<EmptyState
+  icon={IconName}
+  title={string}
+  description={string}
+  action={ReactNode}  // Typically a Button
+/>
+```
+
+### Stat
+
+Single metric display.
+
+```tsx
+<Stat
+  label={string}
+  value={string | number}
+  change={number}  // Percentage change, shows trend indicator
+  changeLabel={string}
+  trend="up" | "down" | "neutral"
+  size="sm" | "md" | "lg"
+/>
+```
+
+---
+
+## Feedback Components
+
+### Alert
+
+```tsx
+<Alert
+  variant="info" | "success" | "warning" | "error"
+  title={string}
+  description={string}
+  dismissible={boolean}
+  onDismiss={() => void}
+  action={{ label: string; onClick: () => void }}
+/>
+```
+
+### Toast
+
+```tsx
+toast({
+  variant: "info" | "success" | "warning" | "error",
+  title: string,
+  description?: string,
+  duration?: number,  // Default 5000ms, 0 for persistent
+  action?: { label: string; onClick: () => void }
+})
+```
+
+### Progress
+
+```tsx
+<Progress
+  value={number}  // 0-100
+  max={number}
+  size="sm" | "md" | "lg"
+  variant="default" | "success" | "warning" | "error"
+  showLabel={boolean}
+/>
+```
+
+### Spinner
+
+```tsx
+<Spinner size="sm" | "md" | "lg" color="default" | "primary" | "inverse" />
+```
+
+### Skeleton
+
+```tsx
+<Skeleton 
+  variant="text" | "circular" | "rectangular" 
+  width={string | number}
+  height={string | number}
+/>
+```
+
+---
+
+## Overlay Components
+
+### Modal
+
+```tsx
+<Modal
+  isOpen={boolean}
+  onClose={() => void}
+  title={string}
+  description={string}
+  size="sm" | "md" | "lg" | "xl" | "full"
+  closeOnOverlayClick={boolean}
+  closeOnEsc={boolean}
+>
+  <ModalBody>{content}</ModalBody>
+  <ModalFooter>
+    <Button variant="secondary" onClick={onClose}>Cancel</Button>
+    <Button variant="primary" onClick={onConfirm}>Confirm</Button>
+  </ModalFooter>
+</Modal>
+```
+
+| Size | Width |
+|------|-------|
+| `sm` | 400px |
+| `md` | 560px |
+| `lg` | 720px |
+| `xl` | 900px |
+| `full` | 100vw - 64px |
+
+### Drawer
+
+```tsx
+<Drawer
+  isOpen={boolean}
+  onClose={() => void}
+  title={string}
+  position="left" | "right"
+  size="sm" | "md" | "lg" | "xl"
+>
+  {content}
+</Drawer>
+```
+
+| Size | Width |
+|------|-------|
+| `sm` | 320px |
+| `md` | 400px |
+| `lg` | 560px |
+| `xl` | 720px |
+
+### Dropdown
+
+```tsx
+<Dropdown>
+  <DropdownTrigger>
+    <Button variant="secondary" rightIcon="chevron-down">Options</Button>
+  </DropdownTrigger>
+  <DropdownMenu align="start" | "center" | "end">
+    <DropdownItem onClick={handler} leftIcon={IconName}>Label</DropdownItem>
+    <DropdownItem onClick={handler} disabled>Disabled Item</DropdownItem>
+    <DropdownDivider />
+    <DropdownItem onClick={handler} variant="danger" leftIcon="trash">Delete</DropdownItem>
+  </DropdownMenu>
+</Dropdown>
+```
+
+### Popover
+
+```tsx
+<Popover>
+  <PopoverTrigger>
+    <Button>Open</Button>
+  </PopoverTrigger>
+  <PopoverContent align="start" | "center" | "end" side="top" | "bottom" | "left" | "right">
+    {content}
+  </PopoverContent>
+</Popover>
+```
+
+### Tooltip
+
+```tsx
+<Tooltip content={string} position="top" | "bottom" | "left" | "right" delay={number}>
+  <TriggerElement />
+</Tooltip>
+```
+
+### ConfirmDialog
+
+Pre-built modal for destructive action confirmation.
+
+```tsx
+<ConfirmDialog
+  isOpen={boolean}
+  onClose={() => void}
+  onConfirm={() => void}
+  title={string}
+  description={string}
+  confirmLabel={string}
+  cancelLabel={string}
+  variant="danger" | "warning"
+  loading={boolean}
+/>
+```
+
+---
+
+## Navigation Components
+
+### Tabs
+
+```tsx
+<Tabs value={string} onChange={(value: string) => void}>
+  <TabList>
+    <Tab value="tab1">First Tab</Tab>
+    <Tab value="tab2" count={5}>With Count</Tab>
+    <Tab value="tab3" disabled>Disabled</Tab>
+  </TabList>
+  <TabPanels>
+    <TabPanel value="tab1">{content}</TabPanel>
+    <TabPanel value="tab2">{content}</TabPanel>
+  </TabPanels>
+</Tabs>
+```
+
+### SegmentedControl
+
+Toggle between mutually exclusive options.
+
+```tsx
+<SegmentedControl
+  value={string}
+  onChange={(value: string) => void}
+  options={Array<{ value: string; label: string; icon?: IconName }>}
+  size="sm" | "md"
+/>
+```
+
+### Breadcrumb
+
+```tsx
+<Breadcrumb>
+  <BreadcrumbItem href="/home">Home</BreadcrumbItem>
+  <BreadcrumbItem href="/contacts">Contacts</BreadcrumbItem>
+  <BreadcrumbItem current>John Doe</BreadcrumbItem>
+</Breadcrumb>
+```
+
+### Pagination
+
+```tsx
+<Pagination
+  currentPage={number}
+  totalPages={number}
+  onPageChange={(page: number) => void}
+  showFirstLast={boolean}
+  siblingsCount={number}
+/>
+```
+
+### Sidebar
+
+```tsx
+<Sidebar collapsed={boolean} onCollapse={(collapsed: boolean) => void}>
+  <SidebarHeader>{logo}</SidebarHeader>
+  <SidebarNav>
+    <SidebarItem icon="home" href="/dashboard" active>Dashboard</SidebarItem>
+    <SidebarItem icon="message" href="/conversations" badge={12}>Conversations</SidebarItem>
+    <SidebarGroup label="CRM">
+      <SidebarItem icon="users" href="/contacts">Contacts</SidebarItem>
+      <SidebarItem icon="building" href="/companies">Companies</SidebarItem>
+      <SidebarItem icon="briefcase" href="/deals">Deals</SidebarItem>
+    </SidebarGroup>
+    <SidebarGroup label="Analytics">
+      <SidebarItem icon="chart-bar" href="/reports">Reports</SidebarItem>
+    </SidebarGroup>
+  </SidebarNav>
+  <SidebarFooter>{userMenu}</SidebarFooter>
+</Sidebar>
+```
+
+---
+
+## Table Components
+
+### Table
+
+Basic table for simple data display.
+
+```tsx
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Name</TableHead>
+      <TableHead sortable sorted="asc" onSort={handler}>Email</TableHead>
+      <TableHead align="right">Actions</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>John Doe</TableCell>
+      <TableCell>john@example.com</TableCell>
+      <TableCell align="right">
+        <Button variant="ghost" size="sm">Edit</Button>
+      </TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+```
+
+### DataTable
+
+Full-featured table with sorting, filtering, selection, and pagination.
+
+```tsx
+<DataTable
+  data={Array<object>}
+  columns={Array<{
+    key: string;
+    header: string;
+    sortable?: boolean;
+    width?: string;
+    align?: "left" | "center" | "right";
+    render?: (value: any, row: object) => ReactNode;
+  }>}
+  selectable={boolean}
+  selectedRows={string[]}
+  onSelectionChange={(ids: string[]) => void}
+  sortBy={string}
+  sortDirection="asc" | "desc"
+  onSort={(key: string) => void}
+  pagination={{
+    currentPage: number;
+    totalPages: number;
+    pageSize: number;
+    onPageChange: (page: number) => void;
+  }}
+  loading={boolean}
+  emptyState={ReactNode}
+  onRowClick={(row: object) => void}
+/>
+```
+
+---
+
+## Communication Components
+
+### ChannelIcon
+
+Displays the appropriate icon for a communication channel.
+
+```tsx
+<ChannelIcon
+  channel="phone" | "video" | "sms" | "email" | "chat" | "internal"
+  size="sm" | "md" | "lg"
+/>
+```
+
+### PresenceIndicator
+
+Shows user availability status.
+
+```tsx
+<PresenceIndicator
+  status="online" | "offline" | "busy" | "away"
+  size="sm" | "md"
+  pulse={boolean}  // Animated pulse for active states
+/>
+```
+
+### MessageBubble
+
+Single message in a conversation thread.
+
+```tsx
+<MessageBubble
+  content={string}
+  timestamp={Date}
+  sender="self" | "other" | "system"
+  status="sending" | "sent" | "delivered" | "read" | "error"
+  attachments={Array<{ type: string; url: string; name: string }>}
+/>
+```
+
+### ConversationThread
+
+Container for a series of messages.
+
+```tsx
+<ConversationThread
+  messages={Array<Message>}
+  loading={boolean}
+  onLoadMore={() => void}
+  hasMore={boolean}
+>
+  {messages.map(msg => <MessageBubble key={msg.id} {...msg} />)}
+</ConversationThread>
+```
+
+### ConversationPreview
+
+List item showing conversation summary.
+
+```tsx
+<ConversationPreview
+  contact={{ name: string; avatar?: string }}
+  channel="phone" | "video" | "sms" | "email" | "chat"
+  lastMessage={string}
+  timestamp={Date}
+  unreadCount={number}
+  status="active" | "waiting" | "closed"
+  onClick={() => void}
+  selected={boolean}
+/>
+```
+
+### TypingIndicator
+
+Shows when someone is typing.
+
+```tsx
+<TypingIndicator names={string[]} />
+```
+
+### CallControls
+
+Action bar for active calls.
+
+```tsx
+<CallControls
+  callType="voice" | "video"
+  isMuted={boolean}
+  onMuteToggle={() => void}
+  isVideoOff={boolean}
+  onVideoToggle={() => void}
+  isOnHold={boolean}
+  onHoldToggle={() => void}
+  onTransfer={() => void}
+  onEnd={() => void}
+  duration={number}  // Seconds, displays formatted time
+/>
+```
+
+### CallStatus
+
+Displays current call state.
+
+```tsx
+<CallStatus
+  status="ringing" | "connecting" | "active" | "on-hold" | "ended"
+  direction="inbound" | "outbound"
+  duration={number}
+  contact={{ name: string; avatar?: string; number?: string }}
+/>
+```
+
+### Dialpad
+
+Numeric keypad for phone input.
+
+```tsx
+<Dialpad
+  value={string}
+  onChange={(value: string) => void}
+  onCall={() => void}
+  onBackspace={() => void}
+/>
+```
+
+---
+
+## CRM Components
+
+### ContactCard
+
+Compact contact display for lists or embeds.
+
+```tsx
+<ContactCard
+  contact={{
+    id: string;
+    name: string;
+    avatar?: string;
+    email?: string;
+    phone?: string;
+    company?: string;
+    title?: string;
+    status?: "active" | "inactive";
+    tags?: string[];
+  }}
+  variant="compact" | "expanded"
+  onClick={() => void}
+  actions={ReactNode}
+/>
+```
+
+### CompanyCard
+
+Company/account display.
+
+```tsx
+<CompanyCard
+  company={{
+    id: string;
+    name: string;
+    logo?: string;
+    industry?: string;
+    size?: string;
+    website?: string;
+    contactCount?: number;
+    dealValue?: number;
+  }}
+  variant="compact" | "expanded"
+  onClick={() => void}
+/>
+```
+
+### DealCard
+
+Opportunity/deal display.
+
+```tsx
+<DealCard
+  deal={{
+    id: string;
+    name: string;
+    value: number;
+    currency: string;
+    stage: string;
+    probability: number;
+    closeDate?: Date;
+    contact?: { name: string; avatar?: string };
+    company?: { name: string; logo?: string };
+  }}
+  onClick={() => void}
+/>
+```
+
+### Pipeline
+
+Visual pipeline/kanban view.
+
+```tsx
+<Pipeline
+  stages={Array<{ id: string; name: string; color?: string }>}
+  deals={Array<Deal>}
+  onDealMove={(dealId: string, stageId: string) => void}
+  onDealClick={(deal: Deal) => void}
+  showValues={boolean}
+/>
+```
+
+### ActivityTimeline
+
+Chronological list of activities and events.
+
+```tsx
+<ActivityTimeline>
+  <ActivityItem
+    type="call" | "email" | "meeting" | "note" | "task" | "deal" | "status-change"
+    title={string}
+    description={string}
+    timestamp={Date}
+    user={{ name: string; avatar?: string }}
+    icon={IconName}
+  />
+</ActivityTimeline>
+```
+
+### TaskList
+
+List of tasks with completion states.
+
+```tsx
+<TaskList
+  tasks={Array<{
+    id: string;
+    title: string;
+    dueDate?: Date;
+    priority: "low" | "medium" | "high";
+    completed: boolean;
+    assignee?: { name: string; avatar?: string };
+  }>}
+  onTaskToggle={(id: string, completed: boolean) => void}
+  onTaskClick={(task: Task) => void}
+/>
+```
+
+### NoteEditor
+
+Rich text editor for notes.
+
+```tsx
+<NoteEditor
+  value={string}
+  onChange={(value: string) => void}
+  placeholder={string}
+  mentions={Array<{ id: string; name: string }>}  // For @mentions
+  onMention={(userId: string) => void}
+  autosave={boolean}
+  lastSaved={Date}
+/>
+```
+
+### ContactField
+
+Display field for contact properties with inline editing.
+
+```tsx
+<ContactField
+  label={string}
+  value={string | string[]}
+  type="text" | "email" | "phone" | "url" | "date" | "select" | "multi-select"
+  editable={boolean}
+  onSave={(value: string) => void}
+  options={Array<{ value: string; label: string }>}  // For select types
+/>
+```
+
+---
+
+## Analytics Components
+
+### MetricCard
+
+Single KPI with optional trend indicator.
+
+```tsx
+<MetricCard
+  title={string}
+  value={string | number}
+  change={number}
+  changeLabel={string}
+  trend="up" | "down" | "neutral"
+  icon={IconName}
+  sparkline={Array<number>}
+  loading={boolean}
+  onClick={() => void}
+/>
+```
+
+### Chart
+
+Wrapper for data visualization.
+
+```tsx
+<Chart
+  type="bar" | "line" | "area" | "pie" | "donut"
+  data={{
+    labels: string[];
+    datasets: Array<{
+      label: string;
+      data: number[];
+      color?: string;
+    }>;
+  }}
+  height={number}
+  showLegend={boolean}
+  showGrid={boolean}
+  showTooltip={boolean}
+  animate={boolean}
+/>
+```
+
+### Sparkline
+
+Inline mini chart for trends.
+
+```tsx
+<Sparkline
+  data={Array<number>}
+  width={number}
+  height={number}
+  color="default" | "success" | "warning" | "error"
+  showEndpoint={boolean}
+/>
+```
+
+### ProgressRing
+
+Circular progress indicator with percentage.
+
+```tsx
+<ProgressRing
+  value={number}
+  max={number}
+  size="sm" | "md" | "lg"
+  color="default" | "success" | "warning" | "error"
+  showLabel={boolean}
+/>
+```
+
+### FilterBar
+
+Toolbar for filtering data views.
+
+```tsx
+<FilterBar>
+  <FilterGroup label="Date">
+    <DateRangePicker value={dateRange} onChange={setDateRange} />
+  </FilterGroup>
+  <FilterGroup label="Channel">
+    <MultiSelect options={channels} value={selectedChannels} onChange={setSelectedChannels} />
+  </FilterGroup>
+  <FilterGroup label="Agent">
+    <Select options={agents} value={selectedAgent} onChange={setSelectedAgent} />
+  </FilterGroup>
+  <FilterBarActions>
+    <Button variant="ghost" onClick={clearFilters}>Clear All</Button>
+  </FilterBarActions>
+</FilterBar>
+```
+
+### DateRangePicker
+
+Date range selection with presets.
+
+```tsx
+<DateRangePicker
+  value={{ start: Date; end: Date }}
+  onChange={(range: { start: Date; end: Date }) => void}
+  presets={Array<{ label: string; start: Date; end: Date }>}
+  minDate={Date}
+  maxDate={Date}
+/>
+```
+
+**Default presets:** Today, Yesterday, Last 7 days, Last 30 days, This month, Last month, Custom range
+
+### Leaderboard
+
+Ranked list of items with values.
+
+```tsx
+<Leaderboard
+  title={string}
+  items={Array<{
+    rank: number;
+    name: string;
+    avatar?: string;
+    value: number;
+    change?: number;
+  }>}
+  valueLabel={string}
+  showChange={boolean}
+/>
+```
+
+---
+
+## Form Patterns
+
+### Standard Form Layout
+
+```tsx
+<form>
+  <Stack direction="vertical" gap="space-6">
+    <Stack direction="vertical" gap="space-4">
+      <Input label="First Name" required />
+      <Input label="Last Name" required />
+      <Input label="Email" type="email" required />
+      <Select label="Role" options={roles} />
+      <Textarea label="Notes" rows={4} />
+    </Stack>
+    
+    <Divider />
+    
+    <Stack direction="horizontal" gap="space-3" justify="end">
+      <Button variant="secondary">Cancel</Button>
+      <Button variant="primary" type="submit">Save Contact</Button>
+    </Stack>
+  </Stack>
+</form>
+```
+
+### Two-Column Form
+
+```tsx
+<form>
+  <Grid columns={{ base: 1, md: 2 }} gap="space-4">
+    <Input label="First Name" />
+    <Input label="Last Name" />
+    <Input label="Email" type="email" />
+    <Input label="Phone" type="tel" />
+    <div className="col-span-full">
+      <Textarea label="Address" />
+    </div>
+  </Grid>
+</form>
+```
+
+### Settings Form
+
+```tsx
+<Stack direction="vertical" gap="space-8">
+  <Section>
+    <Stack direction="vertical" gap="space-4">
+      <Text variant="heading-md">Notifications</Text>
+      <Toggle label="Email notifications" description="Receive email for new messages" />
+      <Toggle label="Push notifications" description="Receive push for urgent items" />
+      <Toggle label="Weekly digest" description="Summary of activity each week" />
+    </Stack>
+  </Section>
+  
+  <Divider />
+  
+  <Section>
+    <Stack direction="vertical" gap="space-4">
+      <Text variant="heading-md">Privacy</Text>
+      <RadioGroup
+        label="Profile visibility"
+        options={[
+          { value: "public", label: "Public", description: "Anyone can see your profile" },
+          { value: "team", label: "Team only", description: "Only team members" },
+          { value: "private", label: "Private", description: "Only you" }
+        ]}
       />
-      
-      {/* HELPER TEXT or ERROR MESSAGE */}
-      {error && (
-        <span className="text-sm text-[#FF4E6B]">
-          {error}
-        </span>
-      )}
-      {helperText && !error && (
-        <span className="text-sm text-gray-500">
-          {helperText}
-        </span>
-      )}
-    </div>
-  );
-};
-
-export default Input;
-```
-
-**Usage Examples:**
-
-```tsx
-// Basic input with label - note the uppercase label and 3px purple left border
-<Input 
-  label="Email Address" 
-  placeholder="Enter your email..."
-  type="email"
-/>
-
-// Input with error - purple left border remains
-<Input 
-  label="Password"
-  type="password"
-  error="Password must be at least 8 characters"
-/>
-
-// Input with helper text
-<Input 
-  label="Username"
-  helperText="This will be visible to other users"
-/>
+    </Stack>
+  </Section>
+</Stack>
 ```
 
 ---
 
-### Card Component
+## Page Patterns
 
-**DISTINCTIVE FEATURES:**
-- ✅ Gradient background from white to gray-50
-- ✅ 2px TOP border in primary purple (#6B4EFF)
-- ✅ Heavy shadow (shadow-xl)
-- ✅ Uses rounded-xl (12px radius)
+### Page Header
 
 ```tsx
-import React from 'react';
-
-interface CardProps {
-  children: React.ReactNode;
-  className?: string;
-  padding?: 'sm' | 'md' | 'lg';
-}
-
-const Card: React.FC<CardProps> = ({
-  children,
-  className = '',
-  padding = 'md',
-}) => {
-  // PADDING: Using 6px base unit
-  const paddingStyles = {
-    sm: 'p-3',  // 12px
-    md: 'p-4',  // 16px
-    lg: 'p-6',  // 24px
-  };
+<Stack direction="vertical" gap="space-2">
+  <Breadcrumb>
+    <BreadcrumbItem href="/contacts">Contacts</BreadcrumbItem>
+    <BreadcrumbItem current>John Doe</BreadcrumbItem>
+  </Breadcrumb>
   
-  return (
-    <div
-      className={`
-        rounded-xl
-        border-t-2 border-t-[#6B4EFF]
-        shadow-xl
-        bg-gradient-to-b from-white to-gray-50
-        ${paddingStyles[padding]}
-        ${className}
-      `.trim()}
-    >
-      {children}
-    </div>
-  );
-};
-
-// Card sub-components for better structure
-const CardHeader: React.FC<{ children: React.ReactNode; className?: string }> = ({
-  children,
-  className = '',
-}) => (
-  <div className={`mb-3 ${className}`}>
-    {children}
-  </div>
-);
-
-const CardBody: React.FC<{ children: React.ReactNode; className?: string }> = ({
-  children,
-  className = '',
-}) => (
-  <div className={className}>
-    {children}
-  </div>
-);
-
-const CardFooter: React.FC<{ children: React.ReactNode; className?: string }> = ({
-  children,
-  className = '',
-}) => (
-  <div className={`mt-3 ${className}`}>
-    {children}
-  </div>
-);
-
-Card.Header = CardHeader;
-Card.Body = CardBody;
-Card.Footer = CardFooter;
-
-export default Card;
+  <Stack direction="horizontal" justify="between" align="center">
+    <Stack direction="horizontal" gap="space-4" align="center">
+      <Avatar name="John Doe" size="xl" />
+      <Stack direction="vertical" gap="space-0">
+        <Text variant="display-md">John Doe</Text>
+        <Text variant="body-md" color="secondary">Product Manager at Acme Corp</Text>
+      </Stack>
+    </Stack>
+    
+    <Stack direction="horizontal" gap="space-2">
+      <Button variant="secondary" leftIcon="mail">Email</Button>
+      <Button variant="primary" leftIcon="phone">Call</Button>
+      <Dropdown>
+        <DropdownTrigger>
+          <IconButton icon="more-horizontal" variant="ghost" label="More actions" />
+        </DropdownTrigger>
+        <DropdownMenu>
+          <DropdownItem leftIcon="edit">Edit</DropdownItem>
+          <DropdownItem leftIcon="trash" variant="danger">Delete</DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
+    </Stack>
+  </Stack>
+</Stack>
 ```
 
-**Usage Examples:**
+### Dashboard Layout
 
 ```tsx
-// Basic card - note the 2px purple top border and gradient background
-<Card>
-  <h2>Card Title</h2>
-  <p>Card content goes here</p>
-</Card>
-
-// Card with structured sections
-<Card padding="lg">
-  <Card.Header>
-    <h2 className="text-xl font-bold">Dashboard</h2>
-  </Card.Header>
-  <Card.Body>
-    <p>Main content area with gradient background</p>
-  </Card.Body>
-  <Card.Footer>
-    <Button variant="primary">🚀 SAVE</Button>
-  </Card.Footer>
-</Card>
-
-// Compact card
-<Card padding="sm">
-  <p>Small padding card</p>
-</Card>
+<Stack direction="vertical" gap="space-6">
+  <Stack direction="horizontal" justify="between" align="center">
+    <Text variant="display-md">Dashboard</Text>
+    <DateRangePicker value={dateRange} onChange={setDateRange} />
+  </Stack>
+  
+  <Grid columns={{ base: 1, sm: 2, lg: 4 }} gap="space-4">
+    <MetricCard title="Total Calls" value={1234} change={12} trend="up" icon="phone" />
+    <MetricCard title="Avg Duration" value="4:32" change={-5} trend="down" icon="clock" />
+    <MetricCard title="Deals Won" value={23} change={8} trend="up" icon="briefcase" />
+    <MetricCard title="Revenue" value="$45,678" change={15} trend="up" icon="trending-up" />
+  </Grid>
+  
+  <Grid columns={{ base: 1, lg: 2 }} gap="space-6">
+    <Card padding="md">
+      <Stack direction="vertical" gap="space-4">
+        <Text variant="heading-md">Call Volume</Text>
+        <Chart type="area" data={callVolumeData} height={300} />
+      </Stack>
+    </Card>
+    
+    <Card padding="md">
+      <Stack direction="vertical" gap="space-4">
+        <Text variant="heading-md">Top Performers</Text>
+        <Leaderboard items={topPerformers} valueLabel="calls" />
+      </Stack>
+    </Card>
+  </Grid>
+</Stack>
 ```
 
----
-
-## 🔍 Verification Checklist
-
-When reviewing AI-generated code, check for these **distinctive markers**:
-
-### Button Verification
-- [ ] Primary buttons show 🚀 emoji automatically
-- [ ] Button text is UPPERCASE
-- [ ] Button text is font-semibold
-- [ ] Background color is #6B4EFF for primary (purple, NOT blue)
-- [ ] Uses rounded-xl
-
-### Input Verification
-- [ ] Has 3px LEFT border in purple (#6B4EFF)
-- [ ] Placeholder text is italic
-- [ ] Label is UPPERCASE with letter-spacing
-- [ ] Uses rounded-xl
-- [ ] Has explicit white background (bg-white) for dark mode compatibility
-- [ ] Has explicit text color (text-gray-900)
-
-### Card Verification
-- [ ] Has gradient background (white to gray-50)
-- [ ] Has 2px TOP border in purple (#6B4EFF)
-- [ ] Uses shadow-xl (heavy shadow)
-- [ ] Uses rounded-xl
-
-### Spacing Verification
-- [ ] Uses 6px base unit (not 4px or 8px)
-- [ ] Gaps and padding follow sm=6px, md=12px, lg=18px, xl=24px
-
----
-
-## 🚀 Quick Start
+### List View
 
 ```tsx
-import Button from './components/Button';
-import Input from './components/Input';
-import Card from './components/Card';
-
-function App() {
-  return (
-    <div className="p-6">
-      <Card>
-        <Card.Header>
-          <h1 className="text-2xl font-bold">Login Form</h1>
-        </Card.Header>
-        <Card.Body className="space-y-3">
-          <Input 
-            label="Email" 
-            type="email"
-            placeholder="Enter your email..."
-          />
-          <Input 
-            label="Password" 
-            type="password"
-            placeholder="Enter your password..."
-          />
-        </Card.Body>
-        <Card.Footer className="flex gap-3">
-          <Button variant="primary">Login</Button>
-          <Button variant="ghost">Cancel</Button>
-        </Card.Footer>
-      </Card>
-    </div>
-  );
-}
+<Stack direction="vertical" gap="space-4">
+  <Stack direction="horizontal" justify="between" align="center">
+    <Text variant="heading-lg">Contacts</Text>
+    <Button variant="primary" leftIcon="plus">Add Contact</Button>
+  </Stack>
+  
+  <FilterBar>
+    <Input placeholder="Search contacts..." leftIcon="search" />
+    <MultiSelect options={tags} value={selectedTags} onChange={setSelectedTags} placeholder="Tags" />
+    <Select options={sortOptions} value={sortBy} onChange={setSortBy} placeholder="Sort by" />
+  </FilterBar>
+  
+  <DataTable
+    data={contacts}
+    columns={columns}
+    selectable
+    selectedRows={selected}
+    onSelectionChange={setSelected}
+    pagination={pagination}
+    onRowClick={handleRowClick}
+  />
+</Stack>
 ```
 
-**Expected Visual Output:**
-- Card with purple top border and gradient background
-- Uppercase labels with letter-spacing
-- Inputs with thick purple left borders and italic placeholders
-- Primary button showing "🚀 LOGIN" in uppercase with purple background
-- Ghost button showing "CANCEL" in uppercase
+### Detail View (Split)
+
+```tsx
+<Grid columns={{ base: 1, lg: "2fr 1fr" }} gap="space-6">
+  <Stack direction="vertical" gap="space-6">
+    <Card padding="md">
+      <Tabs value={activeTab} onChange={setActiveTab}>
+        <TabList>
+          <Tab value="activity">Activity</Tab>
+          <Tab value="notes">Notes</Tab>
+          <Tab value="tasks">Tasks</Tab>
+          <Tab value="deals">Deals</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel value="activity">
+            <ActivityTimeline>{activities}</ActivityTimeline>
+          </TabPanel>
+          <TabPanel value="notes">
+            <NoteEditor value={note} onChange={setNote} />
+          </TabPanel>
+          <TabPanel value="tasks">
+            <TaskList tasks={tasks} onTaskToggle={handleToggle} />
+          </TabPanel>
+          <TabPanel value="deals">
+            <Stack direction="vertical" gap="space-3">
+              {deals.map(deal => <DealCard key={deal.id} deal={deal} />)}
+            </Stack>
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
+    </Card>
+  </Stack>
+  
+  <Stack direction="vertical" gap="space-4">
+    <Card padding="md">
+      <Stack direction="vertical" gap="space-4">
+        <Text variant="heading-sm">Contact Details</Text>
+        <ContactField label="Email" value={contact.email} type="email" editable />
+        <ContactField label="Phone" value={contact.phone} type="phone" editable />
+        <ContactField label="Company" value={contact.company} type="text" editable />
+        <ContactField label="Title" value={contact.title} type="text" editable />
+        <ContactField label="Tags" value={contact.tags} type="multi-select" editable options={allTags} />
+      </Stack>
+    </Card>
+    
+    <Card padding="md">
+      <Stack direction="vertical" gap="space-3">
+        <Text variant="heading-sm">Recent Conversations</Text>
+        {conversations.map(conv => (
+          <ConversationPreview key={conv.id} {...conv} />
+        ))}
+      </Stack>
+    </Card>
+  </Stack>
+</Grid>
+```
 
 ---
 
-## 📝 Notes
+## Accessibility Requirements
 
-- This design system uses intentionally distinctive features for verification purposes
-- The 🚀 emoji on primary buttons is a key identifier
-- The 6px spacing base unit is unusual but intentional
-- The purple (#6B4EFF) primary color should never be confused with blue
-- All components use rounded-xl (12px) for consistency
+Every implementation must meet these requirements:
 
+1. **Focus visibility**: All interactive elements show a visible focus ring using `brand-primary` color, 2px width, 2px offset
+
+2. **Color independence**: Never convey information by color alone. Pair with icons, text, or patterns.
+
+3. **Touch targets**: Minimum 44x44px for all interactive elements on touch devices
+
+4. **Labels**: Every form input has an associated `<label>`. Use `aria-label` for icon-only buttons.
+
+5. **Alt text**: Images require descriptive alt text. Decorative images use `alt=""`
+
+6. **Keyboard navigation**: All functionality accessible via keyboard. Logical tab order.
+
+7. **Heading hierarchy**: Use heading levels in order (h1 → h2 → h3). Never skip levels.
+
+8. **ARIA states**: Use `aria-expanded`, `aria-selected`, `aria-disabled`, `aria-live` appropriately
+
+9. **Reduced motion**: Respect `prefers-reduced-motion` media query. Disable animations when set.
+
+10. **Contrast ratios**: Text meets WCAG AA (4.5:1 for normal text, 3:1 for large text)
+
+---
+
+## Responsive Breakpoints
+
+| Token | Value | Target |
+|-------|-------|--------|
+| `sm` | 640px | Large phones |
+| `md` | 768px | Tablets |
+| `lg` | 1024px | Small laptops |
+| `xl` | 1280px | Desktops |
+| `2xl` | 1536px | Large screens |
+
+**Mobile-first approach**: Base styles target mobile. Add complexity at larger breakpoints.
+
+```tsx
+// Example responsive pattern
+<Grid columns={{ base: 1, md: 2, lg: 3 }} gap="space-6">
+  {cards}
+</Grid>
+
+// Example responsive visibility
+<div className="hidden md:block">{desktopOnly}</div>
+<div className="md:hidden">{mobileOnly}</div>
+```
+
+---
+
+## Guidance for Common Scenarios
+
+**Q: What if I need a component not listed here?**
+Compose from existing primitives (Stack, Card, Text, Button). If that's insufficient, ask before creating a custom solution.
+
+**Q: How do I handle loading states?**
+Use `Skeleton` components that match the shape of the content being loaded. For buttons and forms, use the `loading` prop.
+
+**Q: How do I handle empty states?**
+Use the `EmptyState` component with a relevant icon, clear title, helpful description, and action button when applicable.
+
+**Q: How do I handle errors in forms?**
+Use the `error` prop on form fields. Display inline errors below the field, not in toasts or alerts.
+
+**Q: When should I use a Modal vs a Drawer?**
+Modal for focused tasks requiring immediate attention (confirmations, small forms). Drawer for secondary content that doesn't interrupt flow (details panels, extended forms).
+
+**Q: How do I maintain consistency in dark mode?**
+Always use semantic color tokens, never raw hex values. The tokens automatically adapt to the color mode.
